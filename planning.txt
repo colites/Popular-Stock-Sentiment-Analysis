@@ -1,0 +1,2 @@
+The AI will go through reddit subforums such as wallstreetbets, to figure out which stocks are being hyped up.
+It will classify them as a pump and dump or as a good opportunity for hype investing.
