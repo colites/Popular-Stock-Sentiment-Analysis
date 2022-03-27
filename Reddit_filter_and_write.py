@@ -45,7 +45,7 @@ def filter_Ticker_Characters(ticker):
 ## returns bool confirming ticker status 
 ## also adds the tickers to the ticker set that will be used to make the database.
 def filter_Tickers(ticker, tickersSet):
-    BLACKLIST = ['EV','SELL', 'BUY', 'ETF','SPAC','WSB']
+    BLACKLIST = ['EV','SELL', 'BUY', 'ETF','SPAC','WSB', 'USA', 'IRA']
     
     if ticker in BLACKLIST:
         return False
@@ -54,8 +54,6 @@ def filter_Tickers(ticker, tickersSet):
     tickersSet.add(ticker)
     return True
 
-#### CAN HAVE MULTIPLE DIFFERENT TICKERS AT ONCE, MUST FIND A WAY TO DIFFERENTIATE
-    
 for title in titles:
     bools, ticker_word = Mentioned_Potential_Ticker(title)
     file.writerow([title, str(bools), str(ticker_word)])
