@@ -1,2 +1,17 @@
 The AI will go through reddit subforums such as wallstreetbets, to figure out which stocks are being hyped up.
 It will classify them as a pump and dump or as a good opportunity for hype investing.
+
+
+## Accurate Ticker Filtering:
+
+Currently have these steps in place for filtering:
+
+- Filter by Uppercase
+- Filter by $ sign on words
+- Filter by length of Words having to be 1 < words < 5
+- Filter by a blacklist of common words that fit above but are not tickers
+
+Still need: 
+
+- Filter so different tickers in same title are counted
+- Further Filtering to reduce false-positives and false-negatives
