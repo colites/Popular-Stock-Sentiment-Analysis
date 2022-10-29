@@ -1,0 +1,8 @@
+praw
+psaw
+numpy
+matplotlib
+pandas
+nltk
+psycopg2
+alpaca_trade_api
