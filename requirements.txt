@@ -1,8 +1,8 @@
 praw
-psaw
+pmaw
 numpy
 matplotlib
 pandas
 nltk
 psycopg2
-alpaca_trade_api
+yfinance

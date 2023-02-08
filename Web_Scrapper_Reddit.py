@@ -1,6 +1,9 @@
 import csv
 import praw
-from psaw import PushshiftAPI
+import time
+from pmaw import PushshiftAPI
+from datetime import date
+import yfinance as yf
 
 api = PushshiftAPI()
 
@@ -14,9 +17,9 @@ def Get_Submissions_rWSB(size):
                                 limit= size
                                 )
     for submission in submissions:
-        title= submission.title
-        url = submission.url
-        author = submission.author
+        title= submission['title']
+        url = submission['url']
+        author = submission['author']
 
         submission_list.append((title,url,author))
     return submission_list
@@ -31,9 +34,9 @@ def Get_Submissions_rInvesting(size):
                                 limit = size
                                 )
     for submission in submissions:
-        title= submission.title
-        url = submission.url
-        author = submission.author
+        title= submission['title']
+        url = submission['url']
+        author = submission['author']
 
         submission_list.append((title,url,author))
     return submission_list
@@ -48,9 +51,9 @@ def Get_Submissions_Any(size, subreddit):
                                 limit = size
                                 )
     for submission in submissions:
-        title= submission.title
-        url = submission.url
-        author = submission.author
+        title= submission['title']
+        url = submission['url']
+        author = submission['author']
 
         submission_list.append((title,url,author))
     return submission_list
@@ -67,3 +70,12 @@ def Get_Comments_From_Submissions(submission_url):
 
         comment_list.append((author,body))
     return comment_list
+
+## Function to search for the stock data on yahoo finance and add it to the database
+def Get_stock_data(stock_ticker):
+    stock_ticke = stock_ticker.replace("$","")
+    tickerl = yf.Ticker(stock_ticke)
+    if tickerl:
+        return date.today(), tickerl.fast_info['day_low'], tickerl.fast_info['day_high']
+    return None, None, None
+   
