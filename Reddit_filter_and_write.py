@@ -44,7 +44,7 @@ def filter_Tickers(ticker):
 
     return False, ticker
 
-def full_pipeline(amount):
+def main(amount):
     ##make a connection to a database and a cursor to execute queries
     connection = psycopg2.connect(host = database_config.DB_HOST, database = database_config.DB_NAME, user = database_config.DB_USER, password = database_config.DB_PASS)
     connection.autocommit = True
@@ -122,6 +122,3 @@ def full_pipeline(amount):
             stats.writerow([ticker, mention[ticker], number_of_positive, number_of_negative])
 
     connection.close()
-
-
-full_pipeline(40)

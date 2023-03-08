@@ -1,0 +1,85 @@
+body{
+	font-family: Arial;
+	margin: 0px;
+	height: 100%;
+}
+
+html { 
+	background-color: #EBECF0;
+	height: 100%;
+}
+
+h1{
+	font-size: 80px;
+}
+
+button {
+	background-color: blue;
+	color: white;
+	font-size: 55px;
+}
+button:hover {
+    color: white;
+    background-color: green;
+}
+
+.loading{
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.loader {
+	border: 14px solid #f3f3f3;
+  	border-radius: 50%;
+  	border-top: 16px solid green;
+  	width: 450px;
+  	height: 450px;
+  	-webkit-animation: spin 2s linear infinite; 
+  	animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+#title_screen{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+
+#grid1{
+	height: 100%;
+	display: grid;
+}
+
+#csv_output{
+	grid-column: 2;
+	grid-row: 1/2;
+	background: lightgray;
+}
+
+#buttons_container{
+	grid-column: 1;
+	grid-row: 1/2;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.options{
+	background-color: blue;
+	color: gray;
+	font-size: 55px;
+}
+
+.options:hover {
+    color: white;
+    background-color: green;
+}

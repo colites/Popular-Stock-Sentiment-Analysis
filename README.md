@@ -11,3 +11,6 @@ Steps to begin using this code
 
 3. run webcrawl_product.py
 - Command line: py Reddit_filter_and_write.py
+
+-- new:
+- type in the command: py -m flask --app Flask_web run

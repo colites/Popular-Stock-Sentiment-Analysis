@@ -70,7 +70,7 @@ def donutchart_mentions(mentions, amounts):
     
     ax2.axis('equal')
     plt.show()
-
+        
 piechart_mentions(data_mentions_tickers, data_mentions_amounts)
 donutchart_mentions(data_mentions_tickers, data_mentions_amounts)
 mentions_and_sentiments_barGraph(data_mentions_tickers, 
