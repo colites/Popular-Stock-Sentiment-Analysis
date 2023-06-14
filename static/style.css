@@ -4,31 +4,143 @@ body{
 	height: 100%;
 }
 
+
 html { 
 	background-color: #EBECF0;
 	height: 100%;
 }
 
+
 h1{
 	font-size: 80px;
+    	text-align: center;
+
 }
+
 
 button {
 	background-color: blue;
 	color: white;
 	font-size: 55px;
-}
-button:hover {
-    color: white;
-    background-color: green;
+	width: 500px;
 }
 
-.loading{
+
+button, .options {
+    	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    	transition: box-shadow 0.3s ease;
+}
+
+
+button:hover, .options:hover {
+    	color: white;
+    	background-color: green;
+    	box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+      	font-size: 18px;
+}
+
+
+th, td {
+	border: 1px solid #dddddd;
+      	text-align: left;
+      	padding: 8px;
+      	line-height: 1.5;
+}
+
+
+th {
+      	background-color: #f2f2f2;
+      	font-weight: bold;
+}
+
+
+tr {
+    	transition: background-color 0.3s ease;
+}
+
+
+tr:nth-child(even) {
+      	background-color: #f2f2f2;
+}
+
+
+tr:hover {
+     	background-color: #ddd;
+}
+
+
+form {
+    	display: flex;
+    	flex-direction: column;
+    	align-items: center;
+    	margin-bottom: 20px;
+}
+
+
+label, input, select {
+    	font-size: 24px;
+    	margin: 5px;
+}
+
+
+input, select {
+    	font-size: 24px;
+    	margin: 5px;
+    	padding: 5px;
+    	border: 2px solid #cccccc;
+    	border-radius: 4px;
+    	outline: none;
+}
+
+
+select {
+    	appearance: none;
+    	background-color: white;
+    	padding-right: 30px;
+    	cursor: pointer;
+    	margin-bottom: 40px; 
+
+}
+
+
+input:focus, select:focus {
+    	border-color: #66afe9;
+    	box-shadow: 0 0 5px rgba(102, 175, 233, 0.5);
+}
+
+
+.form-container {
+    	display: flex;
+    	flex-direction: column;
+    	justify-content: flex-start;
+    	align-items: center;
+    	height: calc(100% - 100px); 
+    	margin-top: -50px;
+}
+
+
+.submit-button {
+    	background-color: blue;
+    	color: white;
+    	font-size: 55px;
+    	width: 500px;
+    	margin-top: 30px;
+}
+
+
+.loading {
 	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
+
 
 .loader {
 	border: 14px solid #f3f3f3;
@@ -40,29 +152,102 @@ button:hover {
   	animation: spin 2s linear infinite;
 }
 
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+
+.visualization-container {
+    	display: flex;
+    	justify-content: center;
+    	align-items: center;
+    	width: 100%;
 }
 
-#title_screen{
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
+
+.dropdown_container {
+	background-color: transparent;
+  	border: none;
+  	box-shadow: none;
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
 }
+
+
+.options{
+	background-color: blue;
+	color: gray;
+	font-size: 55px;
+}
+
+
+.options:hover {
+    	color: white;
+    	background-color: green;
+}
+
+
+#visualization {
+    	width: 70%; 
+    	max-width: 800px; 
+    	height: auto;
+}
+
+
+@-webkit-keyframes spin {
+  	0% { -webkit-transform: rotate(0deg); }
+  	100% { -webkit-transform: rotate(360deg); }
+}
+
+
+#title_screen {
+    	display: grid;
+    	grid-template-rows: auto 1fr auto; 
+    	align-items: center;
+    	justify-items: center;
+    	height: 100%;
+    	padding: 20px;
+    	gap: 20px;
+}
+
+
+#title_screen h1 {
+    	margin: 0;
+    	grid-row: 1;
+ 	margin-top: 90px;
+}
+
+
+#title_screen form {
+    	grid-row: 2;
+    	width: 100%;
+    	display: flex;
+    	flex-direction: column;
+    	justify-content: center;
+    	align-items: center;
+   	gap: 20px;
+}
+
+
+#title_screen button {
+	grid-row: 3;
+    	margin: 0;
+    	margin-top: 90px;
+}
+
 
 #grid1{
 	height: 100%;
 	display: grid;
 }
 
+
 #csv_output{
 	grid-column: 2;
 	grid-row: 1/2;
 	background: lightgray;
+	padding: 20px;
+	margin: 20px;
+	overflow-x: auto;
 }
+
 
 #buttons_container{
 	grid-column: 1;
@@ -73,13 +258,22 @@ button:hover {
 	align-items: center;
 }
 
-.options{
-	background-color: blue;
-	color: gray;
-	font-size: 55px;
+
+#dropdownContainer {
+  	background-color: transparent;
+  	border: none;
+  	box-shadow: none;
 }
 
-.options:hover {
-    color: white;
-    background-color: green;
+
+#dropdownContainer * {
+  	appearance: none;
+  	background-color: white;
+  	border: none;
+  	box-shadow: none;
+}
+
+
+#checkboxContainer {
+    	margin-bottom: 60px; 
 }

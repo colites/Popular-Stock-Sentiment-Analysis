@@ -1,14 +1,39 @@
 <!doctype html>
 <html lang="en">
 <head>
-    	<title>Input Form</title>
-	<link rel="stylesheet" href="static/style.css">
-	<script lang="text/javascript" src="/static/interactions.js" defer></script>
+    <title>Input Form</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script lang="text/javascript" src="/static/interactions.js" defer></script>
 </head>
-<div id= "title_screen">
-	<body>
-	<h1>Stock Sentiment Analysis</h1>
-	<a id="loading" onclick="loading_screen()"><button>Begin Search</button></a>
-	</body>
-</div>
+<body>
+    <div id="title_screen">
+        <h1>Stock Sentiment Analysis</h1>
+
+        <form onsubmit="event.preventDefault(); submit_form();" class="form-container">
+            <label for="num_posts">Number of posts:</label>
+            <input type="number" id="num_posts" name="num_posts" min="1" required>
+
+            <label for="subreddit">Subreddit:</label>
+            <select id="subreddit" name="subreddit">
+                <option value="wallstreetbets">wallstreetbets</option>
+                <option value="investing">investing</option>
+            </select>
+
+	    <label for="models">Models to use:</label>
+            <select id="models" name="models" onchange="handleDropdownChange(this)">
+                <option value="All">All</option>
+                <option value="Best">Best</option>
+                <option value="Custom">Custom</option>
+            </select>
+
+            <div id="checkboxContainer">
+                <!-- checkboxes inserted here -->
+            </div>
+            
+	    <input type="hidden" id="chosenOptions" name="chosenOptions">
+
+            <button type="submit">Begin Search</button>
+        </form>
+    </div>
+</body>
 </html>

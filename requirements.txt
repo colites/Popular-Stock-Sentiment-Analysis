@@ -1,9 +1,11 @@
 flask
-praw
-pmaw
 numpy
 matplotlib
 pandas
 nltk
 psycopg2
 yfinance
+scikit-learn
+transformers 
+datasets
+torch
