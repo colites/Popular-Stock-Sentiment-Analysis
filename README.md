@@ -49,4 +49,18 @@ Note: The first time you run the application, it may take some time to download 
 
 ## Usage
 
-- Explain how to use the application here
+The application provides a user-friendly interface to interact with. After launching the application, navigate to `http://127.0.0.1:5000` in your web browser to access it. 
+
+On the Input page, you will be prompted to enter the number of Reddit posts to scrape and select the subreddit and the models for analysis. Once you have made your selections, click the "Submit" button to start the analysis.
+
+The application will then scrape the chosen number of Reddit posts, gather the tickers, and then search for financial news related to those tickers. It will then provide sentiment analysis for all the reddit posts and financial articles that mention the tickers. 
+
+You can also view visualizations of the sentiment analysis results. Click on the "Visualizations" button to see various charts representing different information from the database.
+
+The "Mention Information" button will display a table showing the titles of the texts that were evaluated along with the results and the ticker associated with each text.
+
+The "Sentiment Statistics" button will give you an overview of the frequency of each ticker's mention and the associated sentiments for articles and posts dated today.
+
+To perform another analysis, you can always click on the "Back" button to return to the Input page.
+
+Keep in mind that due to the real-time nature of Reddit posts and financial news, the results can change each time you run the analysis.
