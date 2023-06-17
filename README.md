@@ -64,3 +64,7 @@ The "Sentiment Statistics" button will give you an overview of the frequency of 
 To perform another analysis, you can always click on the "Back" button to return to the Input page.
 
 Keep in mind that due to the real-time nature of Reddit posts and financial news, the results can change each time you run the analysis.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
