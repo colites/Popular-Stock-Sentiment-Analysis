@@ -1,32 +1,52 @@
 # Popular-Stock-Sentiment-Analysis
 
-This is a web application that provides multiple visualization techniques for sentiment analysis. on scrapes Reddit for popular stock tickers and then looks for financial news articles related to those tickers.  
+This project is a web application that performs sentiment analysis on popular stock tickers found on Reddit. It scrapes Reddit for mentions of these tickers and collects financial news articles related to them. The application provides various visualizations for sentiment analysis results.
+
+A demo version of this application is deployed on AWS and can be accessed at:
+
+[Link to AWS deployment]
+
+If you want to run the application locally, follow the steps below:
+
+## Prerequisites
+
+- Python 3.7 or newer
+- PostgreSQL 15 or newer. You can download it [here](https://www.postgresql.org/download/).
 
 ## Installation
 
-A demo version is deployed in AWS with the link: 
+1. Clone the repository and navigate to the downloaded folder.
+    ```
+    git clone https://github.com/yourusername/popular-stock-sentiment-analysis.git
+    cd popular-stock-sentiment-analysis
+    ```
 
-                                             aslngaslkdngklasndglknaslg
+2. Create a virtual environment and activate it:
+    ```
+    python3 -m venv env
+    source env/bin/activate
+    ```
 
-Otherwise, this application can be installed by downloading the code and preferably running the application in an environment to avoid version conflicts.
+3. Install the required packages, if one command does not work use the other:
+    ```
+    pip install -r requirements.txt
+    py -3 -m pip install -r requirements.txt
 
-To install and use the application, follow these steps:
+    ```
 
-Install PostgreSQL to be able to store data. Installation instructions can be found on the Postgres SQl site https://www.postgresql.org/docs/current/install-procedure.html
+4. Set up PostgreSQL:
+    - Install PostgreSQL on your machine following the instructions [here](https://www.postgresql.org/docs/current/install-procedure.html).
+    - Create a new PostgreSQL database for the application.
+    - Update the `database_config.py` file in your application's configuration with your information. Make sure to keep this information secure.
 
-run requirements.txt in its directory to install all dependencies. 
-If one command does not work, try the other command
-```bash
-pip install -r requirements.txt
-py -3 -m pip install -r requirements.txt
-```
+5. Run the application:
+    ```
+    py -m flask --app Flask_web run
+    ```
+    This command will start the server and print an IP address, typically `http://127.0.0.1:5000`, which you can navigate to in your web browser to use the application.
 
-Once the required packages from the text file are installed, you now have to run the server using flask. 
+Note: The first time you run the application, it may take some time to download and set up the necessary models. The application that uses a deep learning model (DistilBERT) for sentiment analysis will take much longer if chosen. The first run will include a training step, which may take approximately 30-45 minutes on high-end consumer computers. Subsequent runs will be faster as the trained model will be saved and reused.
 
-```bash
-py -m flask --app Flask_web run
-```
+## Usage
 
-You will be given a IP corresponding to where the flask app is running from, which would be the client machine (your machine) in this case. Navigate to the IP in your browser, the default IP usually being http://127.0.0.1:5000
-
-Running the application for the first time will be lengthy due to the downloading of files depending on which models are used. If the deep learning model Distilbert is run, then training times in high-end consumer computers will be ~30-45 minutes and can be longer for the first run. It will be much shorter in subsequent runs.
+- Explain how to use the application here
