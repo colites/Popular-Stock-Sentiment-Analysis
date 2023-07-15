@@ -189,7 +189,6 @@ def main_pipeline(num_posts, subreddit, models):
         
         submissions = Rscrap.Get_Submissions_Any(num_posts, subreddit)
         analyzer = eval.SentimentAnalyzer(classifiers=models)
-        analyzer.evaluate_ensemble()
 
         # Do sentiment eval on the reddit titles
         for submission in submissions:
