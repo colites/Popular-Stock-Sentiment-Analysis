@@ -189,6 +189,17 @@ function handleDropdownChange(dropdown) {
         	var bestOptions = ['SVM', 'distilbert'];
         	document.getElementById("chosenOptions").value = bestOptions.join(",");
     	}
+
+}
+
+
+/**
+* Initializes the form defaults for the dropdown menu.
+*/
+function initialize_form() {
+    // Set default values
+    var allOptions = ['bayes', 'SVM', 'distilbert'];
+    document.getElementById("chosenOptions").value = allOptions.join(",");
 }
 
 
@@ -199,6 +210,12 @@ async function submit_form() {
 	const num_posts = document.getElementById("num_posts").value;
   	const subreddit = document.getElementById("subreddit").value;
     	const models = document.getElementById("chosenOptions").value;
+	
+ 	// If "Custom" is selected and no checkboxes are checked, show an alert and prevent form submission
+    	if (document.getElementById('models').value === "Custom" && models === "") {
+        alert("Please select at least one model when 'Custom' option is chosen.");
+        return;  
+    	}
 
   	const data = {
     		num_posts: num_posts,
