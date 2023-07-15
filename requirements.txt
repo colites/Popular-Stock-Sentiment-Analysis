@@ -9,3 +9,4 @@ scikit-learn
 transformers 
 datasets
 torch
+evaluate

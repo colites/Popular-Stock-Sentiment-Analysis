@@ -45,7 +45,7 @@ If you want to run the application locally, follow the steps below:
     ```
     This command will start the server and print an IP address, typically `http://127.0.0.1:5000`, which you can navigate to in your web browser to use the application.
 
-Note: The first time you run the application, it may take some time to download and set up the necessary models. The application that uses a deep learning model (DistilBERT) for sentiment analysis will take much longer if chosen. The first run will include a training step, which may take approximately 30-45 minutes on high-end consumer computers. Subsequent runs will be faster as the trained model will be saved and reused.
+Note: The first time you run the application, it may take some time to download and set up the necessary models. The application that uses a deep learning model (DistilBERT) for sentiment analysis will take much longer if chosen. The first run will include a training step, which may take approximately 55-70 minutes on high-end consumer computers. Subsequent runs will be faster as the trained model will be saved and reused.
 
 ## Usage
 
