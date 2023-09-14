@@ -17,7 +17,7 @@ def Get_Submissions_Any(size, subreddit):
     """
     
     submission_list = []
-    url = "https://www.reddit.com/r/" + subreddit + "/top/.json?limit=" + str(size)
+    url = "https://www.reddit.com/r/" + subreddit + "/new/.json?limit=" + str(size)
 
     response = requests.get(url, headers={"User-Agent": "wgah/5.0"}, timeout=20)
 
@@ -29,11 +29,11 @@ def Get_Submissions_Any(size, subreddit):
             url = post["data"]["url"]
             author = post["data"]["author"]
             date = datetime.fromtimestamp(post["data"]["created_utc"])
-
+            
             submission_list.append((title,url,author,date))
     else:
         print(f"Error fetching data from Reddit API: {response.status_code}")
-    
+
     return submission_list
 
     
@@ -122,6 +122,9 @@ def scrape_marketwatch(ticker):
     
     url = f'https://www.marketwatch.com/investing/stock/{ticker}/news'
     response = requests.get(url, timeout=5)
+    if not response.ok:
+        print('Status code:', response.status_code)
+        
     soup = BeautifulSoup(response.text, 'html.parser')
 
     result = []

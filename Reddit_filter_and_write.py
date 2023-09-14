@@ -21,11 +21,9 @@ def mentioned_potential_ticker(title):
     """
     
     words = title.split()
-    
     for word in words:
-        if word.isupper() and 1 < len(word) < 5:
+        if word.isupper() and 1 < len(word) <= 5:
             blacklisted, ticker = filter_tickers(word)
-            
             # check the blacklist and also the length due to filtering shortening the word
             if not blacklisted and 1 < len(ticker):
                 return True, f'${ticker}'
@@ -64,7 +62,6 @@ def filter_tickers(ticker):
 
     return False, ticker
 
-
 def reddit_eval(connection, cursor, submission, analyzer, mentions, file):
     """
     Analyzes a Reddit submission for potential stock mentions and evaluates sentiments.
@@ -96,7 +93,7 @@ def reddit_eval(connection, cursor, submission, analyzer, mentions, file):
             stock_data = (time, ticker_word, low, high)
             dat.insert_stock(connection, cursor, stock_data)
 
-            sentiment = analyzer.Eval_text(title)
+            sentiment = analyzer.predict_all(title)
 
             # Update sentiment statistics in the mentions dictionary
             if ticker_word not in mentions:
@@ -105,7 +102,7 @@ def reddit_eval(connection, cursor, submission, analyzer, mentions, file):
             mentions[ticker_word]['total_mentions'] += 1
             mentions[ticker_word][sentiment] += 1
 
-            dat.insert_mention_and_sentiment(connection, cursor, stock_data, sentiment, title, date)
+            dat.insert_mention_and_sentiment(connection, cursor, stock_data, sentiment, title, date, "subreddit")
             file.writerow([str(ticker_word), title, url, sentiment])
         except Exception as e:
             print(ticker_word)
@@ -142,7 +139,7 @@ def financial_news_eval(connection, cursor, article, analyzer, mentions, file, t
         stock_data = (time, ticker_word, low, high)
         dat.insert_stock(connection, cursor, stock_data)
 
-        sentiment = analyzer.Eval_text(title)
+        sentiment = analyzer.predict_all(title)
 
         # Update sentiment statistics in the mentions dictionary
         if ticker_word not in mentions:
@@ -151,7 +148,7 @@ def financial_news_eval(connection, cursor, article, analyzer, mentions, file, t
         mentions[ticker_word]['total_mentions'] += 1
         mentions[ticker_word][sentiment] += 1
 
-        dat.insert_mention_and_sentiment(connection, cursor, stock_data, sentiment, title, date)
+        dat.insert_mention_and_sentiment(connection, cursor, stock_data, sentiment, title, date, "Financial News")
         file.writerow([str(ticker_word), title, url, sentiment])
     except Exception as e:
         print(ticker_word)
@@ -171,7 +168,10 @@ def main_pipeline(num_posts, subreddit, models):
      
     # Make a connection to a database and a cursor to execute queries
     # Autocommit is needed to create a database in python
-    connection1 = psycopg2.connect(host = database_config.DB_HOST, database = database_config.DB_NAME, user = database_config.DB_USER, password = database_config.DB_PASS)
+    connection1 = psycopg2.connect(host = database_config.DB_HOST,
+                                   database = database_config.DB_NAME,
+                                   user = database_config.DB_USER,
+                                   password = database_config.DB_PASS)
     connection1.autocommit = True
     cursor1 = connection1.cursor(cursor_factory = psycopg2.extras.DictCursor)
 
@@ -188,7 +188,7 @@ def main_pipeline(num_posts, subreddit, models):
         mentions = {}
         
         submissions = Rscrap.Get_Submissions_Any(num_posts, subreddit)
-        analyzer = eval.SentimentAnalyzer(classifiers=models)
+        analyzer = eval.SentimentAnalyzer(model_names=models)
         analyzer.evaluate_ensemble()
 
         # Do sentiment eval on the reddit titles

@@ -78,10 +78,12 @@ def mentions_and_sentiments_barGraph(mentions, amounts, psentiments, nsentiments
     """
     
     fig, ax = plt.subplots(figsize=(8,8))
+
     positive_mentions = ax.bar(0.5, psentiments, 0.25, label ='Positive', color = 'green')
     negative_mentions = ax.bar(0.75, nsentiments, 0.25, label ='Negative', color = 'red')
     neutral_mentions = ax.bar(0.25, neutral_sentiments, 0.25, label ='Neutral', color = 'gray')
     total_mentions = ax.bar(1, amounts, 0.25, label =' Total', color = 'black')
+
     ax.set_xlabel('Stock Ticker')
     ax.set_ylabel('Number of mentions')
     ax.set_title('Stock ticker sentiment totals')
@@ -119,9 +121,11 @@ def stocks_sentiments_barGraph_all(mentions, amounts, psentiments, nsentiments, 
     x = np.arange(10)
     
     fig, ax = plt.subplots(figsize=(8,8))
+
     positive_mentions = ax.bar(x - 0.1, psentiments, 0.25, label ='Positive', color = 'green')
     negative_mentions = ax.bar(x + 0.1, nsentiments, 0.25, label ='Negative', color = 'red')
     total_mentions = ax.bar(x, amounts, 0.15, label =' Total', color = 'black')
+
     ax.set_xlabel('Stock Ticker')
     ax.set_ylabel('Number of mentions')
     ax.set_title('Comparison of Positive and Negative Mentions in stock tickers')
@@ -185,4 +189,47 @@ def donutchart_mentions(mentions, amounts):
     ax.set_title("Total Mentions for each stock")
     ax.axis('equal')
 
+    return image_base_encoded(fig)
+
+
+def mentions_and_sentiments_line_graph(mentions, amounts, psentiments, nsentiments, neutral_sentiments):
+    """
+    Create a line graph comparing the total, positive, negative, and neutral mentions of a specific stock.
+    
+    Args:
+        mentions (list): A list of stock tickers.
+        amounts (list): A list of total mentions for each stock ticker.
+        psentiments (list): A list of positive sentiment counts for each stock ticker.
+        nsentiments (list): A list of negative sentiment counts for each stock ticker.
+        neutral_sentiments (list): A list of neutral sentiment counts for each stock ticker.
+    
+    Returns:
+        str: The base64-encoded image of the line graph.
+    """
+    
+    fig, ax = plt.subplots(figsize=(8,8))
+    
+    ax.plot(mentions, psentiments, color='green', marker='o', label='Positive')
+    ax.plot(mentions, nsentiments, color='red', marker='o', label='Negative')
+    ax.plot(mentions, neutral_sentiments, color='gray', marker='o', label='Neutral')
+    ax.plot(mentions, amounts, color='black', marker='o', label='Total')
+    
+    ax.set_xlabel('Stock Ticker')
+    ax.set_ylabel('Number of mentions')
+    ax.set_title('Stock ticker sentiment totals')
+    ax.legend()
+    
+    # annotate points on the line graph
+    for i, txt in enumerate(psentiments):
+        ax.annotate(txt, (mentions[i], psentiments[i]), fontsize=9, ha='center', va='bottom')
+        
+    for i, txt in enumerate(nsentiments):
+        ax.annotate(txt, (mentions[i], nsentiments[i]), fontsize=9, ha='center', va='bottom')
+        
+    for i, txt in enumerate(neutral_sentiments):
+        ax.annotate(txt, (mentions[i], neutral_sentiments[i]), fontsize=9, ha='center', va='bottom')
+        
+    for i, txt in enumerate(amounts):
+        ax.annotate(txt, (mentions[i], amounts[i]), fontsize=9, ha='center', va='bottom')
+    
     return image_base_encoded(fig)

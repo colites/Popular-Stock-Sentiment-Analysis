@@ -6,32 +6,50 @@
 	<script lang="text/javascript" src="/static/interactions.js" defer></script>
 </head>
 <body>
+	<!-- This is the main page with the table and buttons -->
 	<div id= "grid1">
 		<div id="csv_output">
 		<!-- table output inserted here -->
 		</div>
-		<div id="buttons_container">
-			<h1>Statistics for Today:</h1>
+		<div id="buttons_container" data-start-date="" data-end-date="">
+			<h1>Statistics for:</h1>
+
+			<!-- Date Range Selection -->
+    			<div id="date_range_selection">
+        			<label for="start_date">Start Date:</label>
+        			<input type="date" id="start_date">
+        
+        			<label for="end_date">End Date:</label>
+        			<input type="date" id="end_date">
+        
+        			<button class="set-date-range-btn" onclick="update_date_range()">Set Date Range</button>
+   			</div>
+			
+			<!-- buttons -->
 			<div class="options">
-			<button id="mentions_info" onclick="mention_information()">Mention information</button>
+				<button id="mentions_info" onclick="mention_information()">Mention information</button>
 			</div>	
 		
 			<div class="options" id="visualizations">
-			<button onclick="visualizations()">visualizations</button>
+				<button onclick="show_modal('visualizations')">visualizations</button>
 			</div>
 
 			<div class="options">
-			<button id="sentiment_stat" onclick="sentiment_stats()">sentiment statistics</button>
+				<button id="sentiment_stat" onclick="sentiment_stats()">sentiment statistics</button>
 			</div>
 
 			<div class="options">
-			<button id="back" onclick="input_screen()">Back</button>
+				<button id="back" onclick="input_screen()">Back</button>
 			</div>
 		</div>
 	</div>
-
-	<div class="visualization-container">
-		<img id="visualization" src="" alt="visualization">
-	</div>
+	
+    	<!-- Modal -->
+    	<div id="modal" class="modal">
+        	<span class="close-button" onclick="close_modal()">&times;</span>
+        	<div class="modal-content">
+		<!-- Modal stuff populated in here -->
+		</div>
+    	</div>
 </body>
 </html>

@@ -4,7 +4,7 @@ import psycopg2.extras
 from datetime import date
 import database_config
 import SQL as queries
-from visualization import mentions_and_sentiments_barGraph, piechart_mentions, donutchart_mentions
+import visualization as visual 
 
 app = Flask(__name__)
 input_values = None
@@ -66,6 +66,9 @@ def process_input():
     num_posts = data.get("num_posts", 1)
     subreddit = data.get("subreddit", "investing")
     models = data.get("models")
+
+    #Javascript and HTML forms convert arrays into strings, so convert it to an array
+    models = models.split(',')
     
     input_values = (num_posts, subreddit, models)
     
@@ -89,7 +92,7 @@ def create_map():
         num_posts = input_values[0]
         subreddit = input_values[1]
         models = input_values[2]
-        
+
         pipe.main_pipeline(num_posts, subreddit, models)
         return f"done"
     else:
@@ -105,8 +108,16 @@ def mention_information():
         Response: JSON response containing the mention information.
     """
     
+    start_date = request.args.get('start_date', default=None, type=str)
+    end_date = request.args.get('end_date', default=None, type=str)
+    
+    if not start_date or not end_date:
+        return jsonify({"error": "Both start_date and end_date parameters are required."}), 400
+
     connection, cursor = create_connection_cursor()
-    data = queries.get_mentions_today_query(connection, cursor, date.today())
+    data = queries.get_mentions_date_range_query(connection, cursor, start_date, end_date)
+    if data == None:
+        return jsonify({"error": "No information could be found in this date range"}), 400
     data = [dict(row) for row in data]
 
     cursor.close()
@@ -123,10 +134,18 @@ def sentiment_statistics():
         Response: JSON response containing the sentiment statistics.
     """
     
-    connection, cursor = create_connection_cursor()
-    data = queries.compare_sentiments_today_query(connection, cursor, date.today())
-    data = [dict(row) for row in data]
+    start_date = request.args.get('start_date', default=None, type=str)
+    end_date = request.args.get('end_date', default=None, type=str)
+    
+    if not start_date or not end_date:
+        return jsonify({"error": "Both start_date and end_date parameters are required."}), 400
 
+    connection, cursor = create_connection_cursor()
+    data = queries.compare_sentiments_all_stocks_date_range(connection, cursor, start_date, end_date)
+    if data == None:
+        return jsonify({"error": "No information could be found in this date range"}), 400
+    data = [dict(row) for row in data]
+   
     cursor.close()
     connection.close()
     return jsonify(data)
@@ -152,9 +171,9 @@ def get_symbols():
     Returns:
         Response: JSON response containing the stock symbols.
     """
-    
+
     connection, cursor = create_connection_cursor()
-    symbols = queries.find_all_stock_symbols_today(connection, cursor, date.today())
+    symbols = queries.find_all_stock_symbols_alltime(connection, cursor)
     return jsonify(symbols)
 
 
@@ -166,12 +185,220 @@ def get_bar_graphs():
     Returns:
         Response: JSON response containing the bar graph data.
     """
+
+    # Get the y-axis parameter from the request URL
+    measured_y = request.args.get('y_measure_type', default=None, type=str)
+    if not measured_y:
+            return jsonify({"error": "Variable to measure not specified"}), 400
+
+    # Get the x-axis parameter if needed. 
+    if measured_y not in ["Sentiments"]:
+        measured_x = request.args.get('x_measure_type', default=None, type=str)
+        if not measured_x:
+            return jsonify({"error": "Variable to be measured not specified"}), 400
+        
+    # Get the date query parameters from the request URL
+    start_date = request.args.get('start_date', default=None, type=str)
+    end_date = request.args.get('end_date', default=None, type=str)
+    if not start_date or not end_date:
+        return jsonify({"error": "Both start_date and end_date parameters are required."}), 400
+
+    # Get the source_type query parameter from the request URL
+    source_type = request.args.get('source_type', default=None, type=str)
+    if not source_type:
+        return jsonify({"error": "Source type not specified"}), 400
     
     # Get the symbol query parameter from the request URL
     symbol = request.args.get('symbol')
+    if not symbol:
+        return jsonify({"error": "Symbol not specified"}), 400
+
     
     connection, cursor = create_connection_cursor()
-    data = queries.compare_sentiments_stock_today_query(connection, cursor, symbol, date.today())
+    data = queries.compare_sentiments_stock_date_range(connection,
+                                                       cursor,
+                                                       symbol,
+                                                       start_date,
+                                                       end_date,
+                                                       measured_y,
+                                                       source_type)
+
+    cursor.close()
+    connection.close()
+    print(data)
+
+    if data is None:
+        return jsonify({"error": "No data available"})
+    
+    mentions = [data[0]]
+    amounts = [data[4]] 
+    psentiments = [data[1]] 
+    nsentiments = [data[2]]
+    neutral_sentiments= [data[3]]
+
+    encoded_image = visual.mentions_and_sentiments_barGraph(mentions, amounts, psentiments, nsentiments, neutral_sentiments)
+
+    return jsonify({"image": encoded_image})
+
+
+@app.route('/get_pie_chart')
+def get_pie_charts():
+    """
+    Retrieve pie chart data for stock mentions and return it as a JSON object.
+
+    Returns:
+        Response: JSON response containing the pie chart data.
+    """
+
+    # Get the y-axis parameter from the request URL
+    measured_y = request.args.get('y_measure_type', default=None, type=str)
+    if not measured_y:
+            return jsonify({"error": "Variable to measure not specified"}), 400
+
+    # Get the x-axis parameter if needed. 
+    if measured_y not in ["Positive", "Negative", "Neutral", "Total"]:
+        measured_x = request.args.get('x_measure_type', default=None, type=str)
+        if not measured_x:
+            return jsonify({"error": "Variable to be measured not specified"}), 400
+        
+    # Get the date query parameters from the request URL
+    start_date = request.args.get('start_date', default=None, type=str)
+    end_date = request.args.get('end_date', default=None, type=str)
+    if not start_date or not end_date:
+        return jsonify({"error": "Both start_date and end_date parameters are required."}), 400
+
+    # Get the source_type query parameter from the request URL
+    source_type = request.args.get('source_type', default=None, type=str)
+    if not source_type:
+        return jsonify({"error": "Source type not specified"}), 400
+
+    # Get the symbol query parameter from the request URL
+    symbol = request.args.get('symbol')
+    if not symbol:
+        return jsonify({"error": "Symbol not specified"}), 400
+    
+    connection, cursor = create_connection_cursor()
+    data = queries.total_mentions_date_range_query(connection, cursor, start_date, end_date)
+
+    cursor.close()
+    connection.close()
+
+    symbol_data = [row['symbol'] for row in data]
+    if measured_y == "Positive":
+        amounts = [row['positive_mentions'] for row in data]
+    elif measured_y == "Negative":
+        amounts = [row['negative_mentions'] for row in data]
+    elif measured_y == "Neutral":
+        amounts = [row['neutral_mentions'] for row in data]
+    else:
+        amounts = [row['total_mentions'] for row in data]
+
+    encoded_image = visual.piechart_mentions(symbol_data, amounts)
+
+    return jsonify({"image": encoded_image})
+
+
+@app.route('/get_donut_chart')
+def get_donut_charts():
+    """
+    Retrieve donut chart data for stock mentions and return it as a JSON object.
+
+    Returns:
+        Response: JSON response containing the donut chart data.
+    """
+
+    # Get the y-axis parameter from the request URL
+    measured_y = request.args.get('y_measure_type', default=None, type=str)
+    if not measured_y:
+            return jsonify({"error": "Variable to measure not specified"}), 400
+
+    # Get the x-axis parameter if needed. 
+    if measured_y not in ["Positive", "Negative", "Neutral", "Total"]:
+        measured_x = request.args.get('x_measure_type', default=None, type=str)
+        if not measured_x:
+            return jsonify({"error": "Variable to be measured not specified"}), 400
+        
+    # Get the date query parameters from the request URL
+    start_date = request.args.get('start_date', default=None, type=str)
+    end_date = request.args.get('end_date', default=None, type=str)
+    if not start_date or not end_date:
+        return jsonify({"error": "Both start_date and end_date parameters are required."}), 400
+
+    # Get the source_type query parameter from the request URL
+    source_type = request.args.get('source_type', default=None, type=str)
+    if not source_type:
+        return jsonify({"error": "Source type not specified"}), 400
+    
+    # Get the symbol query parameter from the request URL
+    symbol = request.args.get('symbol')
+    if not symbol:
+        return jsonify({"error": "Symbol not specified"}), 400
+    
+    connection, cursor = create_connection_cursor()
+    data = queries.total_mentions_date_range_query(connection, cursor, start_date, end_date)
+
+    cursor.close()
+    connection.close()
+
+    symbol_data = [row['symbol'] for row in data]
+    if measured_y == "Positive":
+        amounts = [row['positive_mentions'] for row in data]
+    elif measured_y == "Negative":
+        amounts = [row['negative_mentions'] for row in data]
+    elif measured_y == "Neutral":
+        amounts = [row['neutral_mentions'] for row in data]
+    else:
+        amounts = [row['total_mentions'] for row in data]
+
+    encoded_image = visual.donutchart_mentions(symbol_data, amounts)
+
+    return jsonify({"image": encoded_image})
+
+
+@app.route('/get_line_graph')
+def get_line_graphs():
+    """
+    Retrieve line graph data for a specific stock symbol and return it as a JSON object.
+
+    Returns:
+        Response: JSON response containing the bar graph data.
+    """
+
+    # Get the y-axis parameter from the request URL
+    measured_y = request.args.get('y_measure_type', default=None, type=str)
+    if not measured_y:
+            return jsonify({"error": "Variable to measure not specified"}), 400
+
+    # Get the x-axis parameter if needed. 
+    if measured_y not in ["Sentiments"]:
+        measured_x = request.args.get('x_measure_type', default=None, type=str)
+        if not measured_x:
+            return jsonify({"error": "Variable to be measured not specified"}), 400
+        
+    # Get the date query parameters from the request URL
+    start_date = request.args.get('start_date', default=None, type=str)
+    end_date = request.args.get('end_date', default=None, type=str)
+    if not start_date or not end_date:
+        return jsonify({"error": "Both start_date and end_date parameters are required."}), 400
+
+    # Get the source_type query parameter from the request URL
+    source_type = request.args.get('source_type', default=None, type=str)
+    if not source_type:
+        return jsonify({"error": "Source type not specified"}), 400
+    
+    # Get the symbol query parameter from the request URL
+    symbol = request.args.get('symbol')
+    if not symbol:
+        return jsonify({"error": "Symbol not specified"}), 400
+    
+    connection, cursor = create_connection_cursor()
+    data = queries.compare_sentiments_stock_date_range(connection,
+                                                       cursor,
+                                                       symbol,
+                                                       start_date,
+                                                       end_date,
+                                                       measured_y,
+                                                       source_type)
 
     cursor.close()
     connection.close()
@@ -185,52 +412,7 @@ def get_bar_graphs():
     nsentiments = [data[2]]
     neutral_sentiments= [data[3]]
 
-    encoded_image = mentions_and_sentiments_barGraph(mentions, amounts, psentiments, nsentiments, neutral_sentiments)
-
-    return jsonify({"image": encoded_image})
-
-
-@app.route('/get_pie_chart')
-def get_pie_charts():
-    """
-    Retrieve pie chart data for stock mentions and return it as a JSON object.
-
-    Returns:
-        Response: JSON response containing the pie chart data.
-    """
-    
-    connection, cursor = create_connection_cursor()
-    data = queries.total_mentions_today_stock_query(connection, cursor, date.today())
-
-    cursor.close()
-    connection.close()
-
-    mentions = [row['symbol'] for row in data]
-    amounts = [row['total_mentions'] for row in data]
-
-    encoded_image = piechart_mentions(mentions, amounts)
-
-    return jsonify({"image": encoded_image})
-
-
-@app.route('/get_donut_chart')
-def get_donut_charts():
-    """
-    Retrieve donut chart data for stock mentions and return it as a JSON object.
-
-    Returns:
-        Response: JSON response containing the donut chart data.
-    """    
-    connection, cursor = create_connection_cursor()
-    data = queries.total_mentions_today_stock_query(connection, cursor, date.today())
-
-    cursor.close()
-    connection.close()
-
-    mentions = [row['symbol'] for row in data]
-    amounts = [row['total_mentions'] for row in data]
-
-    encoded_image = donutchart_mentions(mentions, amounts)
+    encoded_image = visual.mentions_and_sentiments_line_graph(mentions, amounts, psentiments, nsentiments, neutral_sentiments)
 
     return jsonify({"image": encoded_image})
 
