@@ -195,7 +195,7 @@ def find_all_stock_symbols_date_range(connection, cursor, start_date, end_date):
     return result
 
 
-def total_mentions_date_range_query(connection, cursor, start_date, end_date):
+def total_mentions_date_range_query(connection, cursor, start_date, end_date, symbol, source_type, measured):
     """
     Query for the total number of mentions of each stock for the current date.
 
@@ -208,20 +208,57 @@ def total_mentions_date_range_query(connection, cursor, start_date, end_date):
         list: A list of dictionaries containing the stock symbol and total_mentions
     """
     
-    query = """
-        SELECT
-            m.symbol,
-            SUM(CASE WHEN ss.sentiment = 'positive' THEN 1 ELSE 0 END) AS positive_mentions,
-            SUM(CASE WHEN ss.sentiment = 'negative' THEN 1 ELSE 0 END) AS negative_mentions,
-            SUM(CASE WHEN ss.sentiment = 'neutral' THEN 1 ELSE 0 END) AS neutral_mentions,
-            COUNT(m.mention_id) as total_mentions
-        FROM mentions m
-        WHERE m.date >= %s AND m.date <= %s
-        GROUP BY m.symbol;
-    """
-    cursor.execute(query, (start_date, end_date))
-    result = cursor.fetchall()
-    return result
+    where_conditions = ["m.date >= %s", "m.date <= %s"]
+    parameters = [start_date, end_date]
+
+    # Adding conditions for source_type
+    if source_type != "All":
+        where_conditions.append("m.source_type = %s")
+        parameters.append(source_type)
+
+    
+    # Query for mentions based on all stocks passing the filters
+    if symbol == "All":
+
+        # Constructing WHERE clause without symbol limitations
+        where_clause = ' AND '.join(where_conditions)
+        
+        query = f"""
+            SELECT
+                m.symbol,
+                SUM(CASE WHEN ss.sentiment = 'positive' THEN 1 ELSE 0 END) AS positive_mentions,
+                SUM(CASE WHEN ss.sentiment = 'negative' THEN 1 ELSE 0 END) AS negative_mentions,
+                SUM(CASE WHEN ss.sentiment = 'neutral' THEN 1 ELSE 0 END) AS neutral_mentions,
+                COUNT(m.mention_id) as total_mentions
+            FROM mentions m
+            JOIN stock_sentiments ss ON m.mention_id = ss.sentiments_id
+            WHERE {where_clause}
+            GROUP BY m.symbol;
+        """
+        cursor.execute(query, tuple(parameters))
+        result = cursor.fetchall()
+        return result
+    
+    # Query for mention ratio of a single stock
+    else:
+        where_conditions.append("m.symbol = %s")
+        parameters.append(symbol)
+
+        where_clause = ' AND '.join(where_conditions)
+
+        query = f"""
+            SELECT
+                SUM(CASE WHEN ss.sentiment = 'positive' THEN 1 ELSE 0 END) AS positive_mentions,
+                SUM(CASE WHEN ss.sentiment = 'negative' THEN 1 ELSE 0 END) AS negative_mentions,
+                SUM(CASE WHEN ss.sentiment = 'neutral' THEN 1 ELSE 0 END) AS neutral_mentions
+            FROM mentions m
+            JOIN stock_sentiments ss ON m.mention_id = ss.sentiments_id
+            WHERE {where_clause}
+            GROUP BY m.symbol;
+        """
+        cursor.execute(query, tuple(parameters))
+        result = cursor.fetchone()
+        return result 
 
 
 def mentions_over_time_stock_query(connection, cursor):

@@ -51,7 +51,7 @@ function load_visualization_options(type){
             		<div class="dropdown_container">
                 		<select id="select_symbol" name="select_symbol">
 					<option value="" disabled selected>Select a Symbol</option>
-					<option value="All">All</option>
+					<option value="All">All(not working for now)</option>
  					<!-- Populate dynamically based on what is in the database -->
 				</select>
            		</div>

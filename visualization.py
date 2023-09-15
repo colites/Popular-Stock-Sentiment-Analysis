@@ -192,6 +192,56 @@ def donutchart_mentions(mentions, amounts):
     return image_base_encoded(fig)
 
 
+def piechart_sentiments(sentiments, values):
+    """
+    Create a pie chart showing the proportion of sentiments for a stock.
+    
+    Args:
+        sentiments (list): A list of sentiment types.
+        values (list): A list of counts for each sentiment type.
+    
+    Returns:
+        str: The base64-encoded image of the pie chart.
+    """
+    
+    font_size = calculate_font_size(len(values))
+
+    fig, ax = plt.subplots(figsize=(8,8))   
+    ax.pie(values, labels= sentiments, shadow = True, startangle = 90, autopct='%1.1f%%',
+           textprops={'fontsize': font_size})
+
+    ax.set_title("Sentiment Proportions for the Stock")
+    ax.axis('equal')
+    return image_base_encoded(fig)
+
+
+def donutchart_sentiments(sentiments, values):
+    """
+    Create a donut chart showing the proportion of sentiments for a stock.
+    
+    Args:
+        sentiments (list): A list of sentiment types.
+        values (list): A list of counts for each sentiment type.
+    
+    Returns:
+        str: The base64-encoded image of the donut chart.
+    """
+    
+    font_size = calculate_font_size(len(values))
+
+    fig, ax = plt.subplots(figsize=(8,8))
+    ax.pie(values, labels= sentiments, startangle = 90, autopct='%1.1f%%',
+           textprops={'fontsize': font_size})
+    
+    centre_circle = plt.Circle((0,0),0.70,fc='white')
+    fig.gca().add_artist(centre_circle)
+
+    ax.set_title("Sentiment Proportions for the Stock")
+    ax.axis('equal')
+
+    return image_base_encoded(fig)
+
+
 def mentions_and_sentiments_line_graph(mentions, amounts, psentiments, nsentiments, neutral_sentiments):
     """
     Create a line graph comparing the total, positive, negative, and neutral mentions of a specific stock.

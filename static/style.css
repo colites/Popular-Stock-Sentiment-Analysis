@@ -164,8 +164,10 @@ input:focus, select:focus {
 
 .dropdown_container {
     	display: flex;
-    	justify-content: center; 
-	width: auto;
+    	flex-direction: column;
+    	align-items: center;
+    	width: 100%;
+    	margin-bottom: 10px;
 }
 
 
@@ -214,6 +216,8 @@ input:focus, select:focus {
 }
 
 
+
+
 .close-button:hover, .close-button:focus {
     	color: black;
     	text-decoration: none;
@@ -222,15 +226,16 @@ input:focus, select:focus {
 
 
 .options-container {
-    display: flex;
-    align-items: flex-start; 
+    	display: flex;
+    	align-items: flex-start; 
 }
 
 
 .buttons-group {
     	display: flex;
-    	flex-direction: column;
-	margin-right: 100px;
+    	flex-direction: row;
+	justify-content: center;
+    	gap: 10px;  
 }
 
 
@@ -238,6 +243,22 @@ input:focus, select:focus {
     	display: flex;
     	flex-direction: column;
 	align-items: center;
+}
+
+
+.set-date-range-btn {
+    	padding: 5px 10px; 
+    	font-size: 16px;   
+    	width: auto;     
+    	margin-top: 10px; 
+}
+
+
+.visualization-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -322,15 +343,13 @@ input:focus, select:focus {
 }
 
 
-.set-date-range-btn {
-    	padding: 5px 10px; 
-    	font-size: 16px;   
-    	width: auto;     
-    	margin-top: 10px; 
-}
-
-
-.modal-content #date_range_selection {
-    	width: 100%; 
-    	margin: 0 auto; 
+#date_range_selection {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; 
 }

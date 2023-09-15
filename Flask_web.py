@@ -278,22 +278,34 @@ def get_pie_charts():
         return jsonify({"error": "Symbol not specified"}), 400
     
     connection, cursor = create_connection_cursor()
-    data = queries.total_mentions_date_range_query(connection, cursor, start_date, end_date)
+    data = queries.total_mentions_date_range_query(connection,
+                                                   cursor,
+                                                   start_date,
+                                                   end_date,
+                                                   symbol,
+                                                   source_type,
+                                                   measured_y)
 
     cursor.close()
     connection.close()
 
-    symbol_data = [row['symbol'] for row in data]
-    if measured_y == "Positive":
-        amounts = [row['positive_mentions'] for row in data]
-    elif measured_y == "Negative":
-        amounts = [row['negative_mentions'] for row in data]
-    elif measured_y == "Neutral":
-        amounts = [row['neutral_mentions'] for row in data]
+    if symbol != 'All':
+        labels = ["positive", "negative", "Neutral"]
+        amounts = [data[0], data[1], data[2]]
+        encoded_image = visual.piechart_sentiments(labels , amounts)
+        
     else:
-        amounts = [row['total_mentions'] for row in data]
-
-    encoded_image = visual.piechart_mentions(symbol_data, amounts)
+        symbol_data = [row['symbol'] for row in data]
+        if measured_y == "Positive":
+            amounts = [row['positive_mentions'] for row in data]
+        elif measured_y == "Negative":
+            amounts = [row['negative_mentions'] for row in data]
+        elif measured_y == "Neutral":
+            amounts = [row['neutral_mentions'] for row in data]
+        else:
+            amounts = [row['total_mentions'] for row in data]
+            
+        encoded_image = visual.piechart_mentions(symbol_data, amounts)
 
     return jsonify({"image": encoded_image})
 
@@ -335,22 +347,34 @@ def get_donut_charts():
         return jsonify({"error": "Symbol not specified"}), 400
     
     connection, cursor = create_connection_cursor()
-    data = queries.total_mentions_date_range_query(connection, cursor, start_date, end_date)
+    data = queries.total_mentions_date_range_query(connection,
+                                                   cursor,
+                                                   start_date,
+                                                   end_date,
+                                                   symbol,
+                                                   source_type,
+                                                   measured_y)
 
     cursor.close()
     connection.close()
 
-    symbol_data = [row['symbol'] for row in data]
-    if measured_y == "Positive":
-        amounts = [row['positive_mentions'] for row in data]
-    elif measured_y == "Negative":
-        amounts = [row['negative_mentions'] for row in data]
-    elif measured_y == "Neutral":
-        amounts = [row['neutral_mentions'] for row in data]
+    if symbol != 'All':
+        labels = ["positive", "negative", "Neutral"]
+        amounts = [data[0], data[1], data[2]]
+        encoded_image = visual.donutchart_sentiments(labels , amounts)
+        
     else:
-        amounts = [row['total_mentions'] for row in data]
-
-    encoded_image = visual.donutchart_mentions(symbol_data, amounts)
+        symbol_data = [row['symbol'] for row in data]
+        if measured_y == "Positive":
+            amounts = [row['positive_mentions'] for row in data]
+        elif measured_y == "Negative":
+            amounts = [row['negative_mentions'] for row in data]
+        elif measured_y == "Neutral":
+            amounts = [row['neutral_mentions'] for row in data]
+        else:
+            amounts = [row['total_mentions'] for row in data]
+            
+        encoded_image = visual.donutchart_mentions(symbol_data, amounts)
 
     return jsonify({"image": encoded_image})
 
