@@ -148,28 +148,6 @@ def insert_mention_and_sentiment(connection, cursor, stock_data, sentiment, text
         print(f"Error: '{err}'")
 
 
-def find_all_stock_symbols_alltime(connection, cursor):
-    """
-    Query to find all symbols in the stock_info table.
-
-    Args:
-        connection: A connection object representing the database connection
-        cursor: A cursor object to execute database queries
-
-    Returns:
-        list: A list of symbols in stock_info
-    """
-    
-    query = """
-        SELECT symbol
-        FROM stock_info
-        ORDER BY symbol ASC;
-    """
-    cursor.execute(query)
-    result = cursor.fetchall()
-    return result
-
-
 def find_all_stock_symbols_date_range(connection, cursor, start_date, end_date):
     """
     Query to find all stock symbols mentioned within a specific date range.
@@ -185,7 +163,7 @@ def find_all_stock_symbols_date_range(connection, cursor, start_date, end_date):
     """
     
     query = """
-        SELECT m.symbol
+        SELECT DISTINCT m.symbol
         FROM mentions m
         WHERE m.date >= %s AND m.date <= %s
         ORDER BY m.symbol ASC;
@@ -345,6 +323,7 @@ def get_mentions_date_range_query(connection, cursor, start_date, end_date):
     cursor.execute(query, (start_date, end_date))
     result = cursor.fetchall()
     return result
+
 
 ### change docstrings
 def compare_sentiments_stock_date_range(connection, cursor, symbol, start_date, end_date, measured_variable, source_type='All'):

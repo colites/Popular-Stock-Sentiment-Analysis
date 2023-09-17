@@ -1,4 +1,3 @@
-
 // ================================
 // Results Page UI Manipulation Functions
 // ================================
@@ -30,102 +29,106 @@ function load_visualization_options(type){
     	const optionsContainer = document.querySelector(".modal-content");
     
     	let specificOptionsHTML = '';
+	switch(type) {
+		case 'pie':
+			specificOptionsHTML = `
+				<div class="dropdown_container">
+            				<select id="y_measure_type" name="y_measure_type">
+						<option value="" disabled selected>Select dependent variable</option>
+                				<option value="Positive">Positive Mentions</option>
+						<option value="Negative">Negative Mentions</option>
+						<option value="Neutral">Neutral Mentions</option>
+						<option value="Total">Total Mentions</option>
+			        	</select>
+           			</div>
+				<div class="dropdown_container">
+            				<select id="x_measure_type" name="x_measure_type">
+						<option value="" disabled selected>Choose independent variable</option>
+							<!-- Populate dynamically based on previous dropdown -->
+			        	</select>
+           			</div>
+            			<div class="dropdown_container">
+                			<select id="select_symbol" name="select_symbol">
+						<option value="" disabled selected>Select a Symbol</option>
+ 						<!-- Populate dynamically based on what is in the database -->
+					</select>
+           			</div>
+    			`;
+			break;
 
-    	if (type === 'pie') {
-    		specificOptionsHTML = `
-			<div class="dropdown_container">
-            			<select id="y_measure_type" name="y_measure_type">
-					<option value="" disabled selected>Select Variable to Measure</option>
-                			<option value="Positive">Positive Mentions</option>
-					<option value="Negative">Negative Mentions</option>
-					<option value="Neutral">Neutral Mentions</option>
-					<option value="Total">Total Mentions</option>
-			        </select>
-           		</div>
-			<div class="dropdown_container">
-            			<select id="x_measure_type" name="x_measure_type">
-					<option value="" disabled selected>Choose a Variable to Measure First</option>
-						<!-- Populate dynamically based on previous dropdown -->
-			        </select>
-           		</div>
-            		<div class="dropdown_container">
-                		<select id="select_symbol" name="select_symbol">
-					<option value="" disabled selected>Select a Symbol</option>
-					<option value="All">All(not working for now)</option>
- 					<!-- Populate dynamically based on what is in the database -->
-				</select>
-           		</div>
-    		`;
-	} else if (type === 'donut') {
-		specificOptionsHTML = `
-			<div class="dropdown_container">
-            			<select id="y_measure_type" name="y_measure_type">
-					<option value="" disabled selected>Select Variable to Measure</option>
-                			<option value="Positive">Positive Mentions</option>
-					<option value="Negative">Negative Mentions</option>
-					<option value="Neutral">Neutral Mentions</option>
-					<option value="Total">Total Mentions</option>
-			        </select>
-           		</div>
-			<div class="dropdown_container">
-            			<select id="x_measure_type" name="x_measure_type">
-					<option value="" disabled selected>Choose a Variable to Measure First</option>
-						<!-- Populate dynamically based on previous dropdown -->
-			        </select>
-           		</div>
-            		<div class="dropdown_container">
-                		<select id="select_symbol" name="select_symbol">
-					<option value="" disabled selected>Select a Symbol</option>
-					<option value="All">All(not working for now)</option>
- 					<!-- Populate dynamically based on what is in the database -->
-				</select>
-           		</div>
-    		`;
-	} else if (type === 'bar') {
-		specificOptionsHTML = `
-			<div class="dropdown_container">
-            			<select id="y_measure_type" name="y_measure_type">
-					<option value="" disabled selected>Select Variable to Measure</option>
-                			<option value="Sentiments">All Sentiments</option>
-			        </select>
-           		</div>
-			<div class="dropdown_container">
-            			<select id="x_measure_type" name="x_measure_type">
-					<option value="" disabled selected>Choose a Variable to Measure First</option>
-						<!-- Populate dynamically based on previous dropdown -->
-			        </select>
-           		</div>
-            		<div class="dropdown_container">
-                		<select id="select_symbol" name="select_symbol">
-					<option value="" disabled selected>Select a Symbol</option>
-					<option value="All">All(Not working for now)</option>
- 					<!-- Populate dynamically based on what is in the database -->
-				</select>
-           		</div>
-    		`;
-	} else {
-		specificOptionsHTML = `
-			<div class="dropdown_container">
-            			<select id="y_measure_type" name="y_measure_type">
-					<option value="" disabled selected>Select Variable to Measure</option>
-					<option value="Sentiments">All Sentiments</option>
-			        </select>
-           		</div>
-			<div class="dropdown_container">
-            			<select id="x_measure_type" name="x_measure_type">
-					<option value="" disabled selected>Choose a Variable to Measure First</option>
-						<!-- Populate dynamically based on previous dropdown -->
-			        </select>
-           		</div>
-            		<div class="dropdown_container">
-                		<select id="select_symbol" name="select_symbol">
-					<option value="" disabled selected>Select a Symbol</option>
-					<option value="All">All(Not working for now)</option>
- 					<!-- Populate dynamically based on what is in the database -->
-				</select>
-           		</div>
-    		`;
+		case 'donut':
+			specificOptionsHTML = `
+				<div class="dropdown_container">
+            				<select id="y_measure_type" name="y_measure_type">
+						<option value="" disabled selected>Select the dependent variable</option>
+                				<option value="Positive">Positive Mentions</option>
+						<option value="Negative">Negative Mentions</option>
+						<option value="Neutral">Neutral Mentions</option>
+						<option value="Total">Total Mentions</option>
+			        	</select>
+           			</div>
+				<div class="dropdown_container">
+            				<select id="x_measure_type" name="x_measure_type">
+						<option value="" disabled selected>Choose independent variable</option>
+							<!-- Populate dynamically based on previous dropdown -->
+			        	</select>
+           			</div>
+            			<div class="dropdown_container">
+                			<select id="select_symbol" name="select_symbol">
+						<option value="" disabled selected>Select a Symbol</option>
+ 						<!-- Populate dynamically based on what is in the database -->
+					</select>
+           			</div>
+    			`;
+			break;
+
+		case 'bar':
+			specificOptionsHTML = `
+				<div class="dropdown_container">
+            				<select id="y_measure_type" name="y_measure_type">
+						<option value="" disabled selected>Choose the dependent variable</option>
+                				<option value="Sentiments">All Sentiments</option>
+			        	</select>
+           			</div>
+				<div class="dropdown_container">
+            				<select id="x_measure_type" name="x_measure_type">
+						<option value="" disabled selected>Choose independent variable</option>
+							<!-- Populate dynamically based on previous dropdown -->
+			       		</select>
+           			</div>
+            			<div class="dropdown_container">
+                			<select id="select_symbol" name="select_symbol">
+						<option value="" disabled selected>Select a Symbol</option>
+ 						<!-- Populate dynamically based on what is in the database -->
+					</select>
+           			</div>
+    			`;
+			break;
+
+		case 'line':
+			specificOptionsHTML = `
+				<div class="dropdown_container">
+            				<select id="y_measure_type" name="y_measure_type">
+						<option value="" disabled selected>Select a dependent variable</option>
+						<option value="Sentiments">All Sentiments</option>
+			        	</select>
+           			</div>
+				<div class="dropdown_container">
+            				<select id="x_measure_type" name="x_measure_type">
+						<option value="" disabled selected>Choose independent variable</option>
+							<!-- Populate dynamically based on previous dropdown -->
+			        	</select>
+           			</div>
+            			<div class="dropdown_container">
+                			<select id="select_symbol" name="select_symbol">
+						<option value="" disabled selected>Select a Symbol</option>
+ 							<!-- Populate dynamically based on what is in the database -->
+					</select>
+           			</div>
+    			`;
+			break;
 	}
+    		
     	optionsContainer.innerHTML = `
         		<div class="visualization-options" id="visualization-options-container">
 				<div id="date_range_selection">
@@ -158,7 +161,7 @@ function load_visualization_options(type){
     	visualizationImage.onload = function() {
         	this.style.display = 'block';
     	};
-	get_all_symbols_dropdown()
+
 	initialize_dropdowns()
 }
 
@@ -178,51 +181,95 @@ function initialize_dropdowns() {
 }
 
 
-function handle_dropdown_change_all() {
-    	const xMeasureDropdown = document.getElementById('x_measure_type');
-    	const symbolDropdown = document.getElementById('select_symbol');
-
-    	// Clear the existing options
-    	xMeasureDropdown.innerHTML = "";
-	
-	// Add a placeholder option
+// Utility function to clear dropdown and add placeholder back
+function reset_dropdown_placeholder(dropdown, placeholderText) {
+    	dropdown.innerHTML = "";
     	let placeholderOption = document.createElement("option");
-    	placeholderOption.value = "";
-    	placeholderOption.text = "Select Variable to be Measured";
+    	placeholderOption.value = placeholderText;
+    	placeholderOption.text = placeholderText;
     	placeholderOption.selected = true;
     	placeholderOption.disabled = true;
-    	xMeasureDropdown.appendChild(placeholderOption);
-
-    	// Get the selected value from the y_measure dropdown
-    	let selectedValue = this.value;
-
-    	let options = [];
-
-   	 // Choose which options to display based on the selected value
-   	 if (selectedValue === "Positive" || selectedValue === "Negative" || selectedValue === "Neutral" || selectedValue === "Total" ) {
-		// All the stocks serve as the x-axis for this measure
-        	hide_dropdown("x_measure_type")
-        	options = [
-            		{ value: "None", text: "None" }
-        	];
-
-    	} else if (selectedValue === "Sentiments") {
-        	// Can only do a singular stock with this option, the stock serves as the x-axis variable
-		hide_dropdown("x_measure_type");
-		options = [
-            		{ value: "None", text: "None" }
-        	];
-    	}
-
-    	// Populate the x_measure dropdown with the new options
-    	options.forEach(function(option) {
-        	let newOption = document.createElement("option");
-        	newOption.value = option.value;
-        	newOption.text = option.text;
-        	xMeasureDropdown.appendChild(newOption);
-    	});
+    	dropdown.appendChild(placeholderOption);
 }
 
+
+async function handle_dropdown_change_all(event) {
+	const container = document.getElementById('visualization-options-container');
+    	const startDate = container.getAttribute('data-start-date-modal');
+    	const endDate = container.getAttribute('data-end-date-modal');
+	const xMeasureDropdown = document.getElementById('x_measure_type');
+	const yMeasureDropdown = document.getElementById('y_measure_type');
+    	const symbolDropdown = document.getElementById('select_symbol');
+	
+	// Check if an event object is provided
+    	if (event) {
+        	event.preventDefault();
+    	}
+	else {
+		 yMeasureDropdown.value = "";
+	}
+
+	// Need to get dates first, to be able to filter symbols by date
+	if (!startDate || !endDate) {
+		alert("Please choose a start date and end date first");
+		this.selectedIndex = -1;  
+		return;
+	}
+
+	// need to wait to get the results of the fetching, hence the async
+	const allSymbols = await fetch_all_symbols();
+
+	// mapping for possible dropdown configurations
+	const dropdownOptions = {
+        	"Positive": { 
+            		x: ["None"], 
+            		symbol: ["All"] 
+        	},
+        	"Negative": { 
+           	 	x: ["None"], 
+            		symbol: ["All"]
+        	},
+        	"Neutral": {
+            		x: ["None"], 
+            		symbol: ["All"]
+        	},
+        	"Total": {
+            		x: ["None"],
+            		symbol: ["All", ...allSymbols]
+       		},
+        	"Sentiments": {
+            		x: ["None"],
+            		symbol: [...allSymbols]
+        	}
+   	};
+	
+    	// Clear the existing options
+    	xMeasureDropdown.innerHTML = "";
+	symbolDropdown.innerHTML = "";
+	
+	reset_dropdown_placeholder(xMeasureDropdown, "Select the independent variable")
+	reset_dropdown_placeholder(symbolDropdown, "Select a Symbol")
+
+	let selectedValue = this.value;
+
+    	if (dropdownOptions[selectedValue]) {
+        	// Populate the x_measure dropdown
+        	dropdownOptions[selectedValue].x.forEach(optionValue => {
+            		let option = document.createElement("option");
+            		option.value = optionValue;
+            		option.text = optionValue;
+            		xMeasureDropdown.appendChild(option);
+        	});
+
+        	// Populate the symbol dropdown
+        	dropdownOptions[selectedValue].symbol.forEach(optionValue => {
+            	let option = document.createElement("option");
+            	option.value = optionValue;
+            	option.text = optionValue;
+            	symbolDropdown.appendChild(option);
+        	});
+	}
+}
 
 function get_selected_value_from_dropdown(dropdownId) {
     	const dropdownElement = document.getElementById(dropdownId);
@@ -247,7 +294,7 @@ function update_date_range_modal() {
     	const container = document.getElementById('visualization-options-container');
     	container.setAttribute('data-start-date-modal', document.getElementById('start_date_modal').value);
     	container.setAttribute('data-end-date-modal', document.getElementById('end_date_modal').value);
-
+ 	handle_dropdown_change_all()
 }
 
 
@@ -261,31 +308,6 @@ function show_dropdown(Id) {
 function hide_dropdown(Id) {
     	const dropdown = document.getElementById(Id);
     	dropdown.style.display = 'none'; 
-}
-
-
-/**
- * Creates a dropdown menu with all the stock tickers
- */
-async function get_all_symbols_dropdown() {
-	const response = await fetch('/symbols');
-    	const symbols = await response.json();
-	
-	const dropdown = document.getElementById('select_symbol');
-
-    	// Populate the dropdown menu with stock symbols
-    	symbols.forEach(symbol => {
-        	const option = document.createElement('option');
-        	option.setAttribute('value', symbol);
-        	option.textContent = symbol;
-        	dropdown.appendChild(option);
-    	});
-	
-    	// Add an event listener to set an attribute indicating the chosen symbol
-    	dropdown.addEventListener('change', (event) => {
-        	const dropdown_container = document.getElementById('select_symbol');
-        	dropdown_container.setAttribute('selected_symbol', event.target.value);
-    	});
 }
 
 
@@ -314,20 +336,20 @@ function get_visualizations_data(route) {
         	alert('Please select both a start and end date');
         	return;
    	 }
-    	if (!selectedSymbol) {
-      	 	alert('Please select a stock symbol');
-        	return;
-    	}
-    	if (!selectedInfoSource) {
-        	alert('Please select an info source');
-        	return;
-    	}
     	if (!selectedMeasureY) {
         	alert('Please select an Y variable to measure');
         	return;
     	}
 	if (document.getElementById('x_measure_type').style.display !== "none" && !selectedMeasureX) {
         	alert('Please select an X variable for measuring');
+        	return;
+    	}
+	if (!selectedSymbol) {
+      	 	alert('Please select a stock symbol');
+        	return;
+    	}
+    	if (!selectedInfoSource) {
+        	alert('Please select an info source');
         	return;
     	}
 
@@ -341,6 +363,11 @@ function get_visualizations_data(route) {
         	x_measure_type: selectedMeasureX
     	});	
 	
+	fetch_query_submit(route, params)
+}
+
+
+function fetch_query_submit(route, params) {
 	// Sending the get request to the server and building the image using the response 
 	fetch(`${route}?${params.toString()}`)
         	.then(response => {
@@ -365,7 +392,6 @@ function get_visualizations_data(route) {
 			alert(error.message);
 			return;
    		 });
-
 }
 
 
@@ -386,6 +412,31 @@ function generate_visualization(type){
 			break;
 	}
 	get_visualizations_data(route)
+}
+
+
+/**
+ * Fetches the symbol data from the server
+ */
+async function fetch_all_symbols() {
+	const container = document.getElementById('visualization-options-container');
+    	const startDate = container.getAttribute('data-start-date-modal');
+    	const endDate = container.getAttribute('data-end-date-modal');
+
+	const response = await fetch(`/symbols?start_date=${startDate}&end_date=${endDate}`);
+	if (!response.ok) {
+        	throw new Error(`Server error: ${response.status} ${response.statusText}`);
+   	}
+
+    	const symbols = await response.json();
+	
+	// Check if allSymbols is in the right format
+    	if (!Array.isArray(symbols)) {
+        	alert("Error fetching symbols!");
+        	return;
+	}
+
+	return symbols;
 }
 
 

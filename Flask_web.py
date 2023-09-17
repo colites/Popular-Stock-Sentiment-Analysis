@@ -172,8 +172,14 @@ def get_symbols():
         Response: JSON response containing the stock symbols.
     """
 
+    start_date = request.args.get('start_date', default=None, type=str)
+    end_date = request.args.get('end_date', default=None, type=str)
+    
+    if not start_date or not end_date:
+        return jsonify({"error": "Both start_date and end_date parameters are required."}), 400
+
     connection, cursor = create_connection_cursor()
-    symbols = queries.find_all_stock_symbols_alltime(connection, cursor)
+    symbols = queries.find_all_stock_symbols_date_range(connection, cursor, start_date, end_date)
     return jsonify(symbols)
 
 
