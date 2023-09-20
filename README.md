@@ -1,6 +1,6 @@
 # Popular-Stock-Sentiment-Analysis
 
-This project is a web application that performs sentiment analysis on popular stock tickers found on Reddit. It scrapes Reddit for mentions of these tickers and collects financial news articles related to them. The application provides various visualizations for sentiment analysis results.
+This project is a web application that performs sentiment analysis on popular stock tickers found on Reddit. It scrapes Reddit for mentions of these tickers and collects financial news articles related to them. The application provides various visualizations for sentiment analysis results. The future purpose for this project will be to create a application that can perform sentiment analysis on text along with visual data analytics with a large choice of models in ensemble, all through an easy to use UI that will allow even the less tech savvy people be able to observe analytics for popular stock tickers.
 
 A demo version of this application is deployed on AWS and can be accessed at:
 
@@ -55,9 +55,16 @@ On the Input page, you will be prompted to enter the number of Reddit posts to s
 
 The application will then scrape the chosen number of Reddit posts, gather the tickers, and then search for financial news related to those tickers. It will then provide sentiment analysis for all the reddit posts and financial articles that mention the tickers. 
 
+You can filter by date by choosing the start and end dates in the date menus. 
+
 You can also view visualizations of the sentiment analysis results. Click on the "Visualizations" button to see various charts representing different information from the database.
 
+Click on the dropdowns to customize the visualization that will be created based on the available data.
+
 The "Mention Information" button will display a table showing the titles of the texts that were evaluated along with the results and the ticker associated with each text.
+
+![Screenshot (54)](https://github.com/colites/Popular-Stock-Sentiment-Analysis/assets/56234676/30473cfb-2dfe-4ae9-ab0a-e8e335019fac)
+
 
 The "Sentiment Statistics" button will give you an overview of the frequency of each ticker's mention and the associated sentiments for articles and posts dated today.
 
