@@ -205,13 +205,18 @@ def piechart_sentiments(sentiments, values):
     """
     
     font_size = calculate_font_size(len(values))
+    colors = ['#008000', '#FF0000', '#808080']  # Green for positive, Red for negative, Grey for neutral
 
     fig, ax = plt.subplots(figsize=(8,8))   
-    ax.pie(values, labels= sentiments, shadow = True, startangle = 90, autopct='%1.1f%%',
-           textprops={'fontsize': font_size})
+    # Set labeldistance to 0.7 to prevent label overlap
+    wedges, texts, autotexts = ax.pie(values, labels=sentiments, colors=colors, shadow=True, startangle=90, autopct='%1.1f%%', labeldistance=0.7)
 
     ax.set_title("Sentiment Proportions for the Stock")
     ax.axis('equal')
+
+    legend_labels = ['Positive', 'Negative', 'Neutral']
+    ax.legend(legend_labels, loc='upper right', fontsize=font_size)
+
     return image_base_encoded(fig)
 
 
@@ -228,17 +233,28 @@ def donutchart_sentiments(sentiments, values):
     """
     
     font_size = calculate_font_size(len(values))
+    colors = ['#008000', '#FF0000', '#808080']  # Green for positive, Red for negative, Grey for neutral
 
     fig, ax = plt.subplots(figsize=(8,8))
-    ax.pie(values, labels= sentiments, startangle = 90, autopct='%1.1f%%',
-           textprops={'fontsize': font_size})
-    
+
+    # Set labeldistance to 0.7 to prevent label overlap
+    wedges, texts, autotexts = ax.pie(values, labels=sentiments, colors=colors, shadow=True, startangle=90, autopct='%1.1f%%', labeldistance=0.7)
+
     centre_circle = plt.Circle((0,0),0.70,fc='white')
     fig.gca().add_artist(centre_circle)
 
     ax.set_title("Sentiment Proportions for the Stock")
     ax.axis('equal')
 
+    legend_labels = ['Positive', 'Negative', 'Neutral']
+    ax.legend(legend_labels, loc='upper right', fontsize=font_size)
+
+    # Adjust font size for text and autopct
+    for text in texts:
+        text.set(size=font_size)
+    for autotext in autotexts:
+        autotext.set(size=font_size)
+        
     return image_base_encoded(fig)
 
 

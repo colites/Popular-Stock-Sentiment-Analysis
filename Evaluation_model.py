@@ -742,6 +742,18 @@ class DistilbertModel(ModelManager):
 
 
 class LogisticRegressionModel(ModelManager):
+    """
+    Represents LogisticRegression model for sentiment analysis. This class preprocesses the data, 
+    trains the LogisticRegression classifier, and can predict sentiment for given text.
+
+    Attributes:
+        MODEL_PATH (str): Path to save or load the model.
+        stop_words (set): Set of stopwords to be removed during preprocessing.
+        train_set (list): Formatted list of training data.
+        test_set (list): Formatted list of testing data.
+        model: Trained SVM classifier in a pipeline.
+        weight (float): The model's accuracy used as its weight in an ensemble.
+    """
 
     MODEL_PATH = './models/LogisticRegression_model.joblib'
 
@@ -765,7 +777,16 @@ class LogisticRegressionModel(ModelManager):
 
         
     def preprocess_text(self, text):
+        """
+        Preprocess the given text by tokenizing and filtering stop words.
         
+        Args:
+            text (str): Text to be preprocessed.
+        
+        Returns:
+            str: Preprocessed text.
+        """
+
         words = nltk.word_tokenize(text)
 
         filtered_words = [word for word in words if word.lower() not in self.stop_words]
@@ -778,6 +799,10 @@ class LogisticRegressionModel(ModelManager):
         """
         Preprocesses the train and test sets based on the LogisticRegression model requirements. 
 
+        Args:
+            train_set (list): The training dataset, where each element is a tuple of (text, label).
+            test_set (list): The test dataset, similar to the training set.
+            
         Returns:
             tuple: The preprocessed train_set and test_set.
         """
@@ -790,7 +815,13 @@ class LogisticRegressionModel(ModelManager):
 
     
     def train(self):
-        
+        """
+        Train a LogisticRegression model using the train set.
+
+        Returns:
+            pipeline: Trained LogisticRegression model in a pipeline.
+        """
+
         train_set = self.train_set
 
         # LogisticRegression model requires a list of features and a list of labels
@@ -812,7 +843,13 @@ class LogisticRegressionModel(ModelManager):
 
     
     def score(self):
-         
+        """
+        Measure the accuracy of the LogisticRegression model on the test set.
+
+        Returns:
+            float: The accuracy of the model.
+        """
+
         test_set = self.test_set
 
         # Logistic Regression model requires a list of features and a list of labels
@@ -825,6 +862,16 @@ class LogisticRegressionModel(ModelManager):
 
     
     def predict(self, text):
+        """
+        Predicts the sentiment of a given text using the trained LogisticRegression model.
+
+        Args:
+            text (str): The input text for which the sentiment needs to be predicted.
+
+        Returns:
+            str: Predicted sentiment label (e.g., 'pos', 'neg', 'neu').
+        """
+
         preprocessed_text_LR = self.preprocess_text(text)
         prediction = self.model.predict([preprocessed_text_LR])[0]
         return prediction
@@ -832,6 +879,18 @@ class LogisticRegressionModel(ModelManager):
 
 
 class RandomForestModel(ModelManager):
+    """
+    Represents RandomForest model for sentiment analysis. This class preprocesses the data, 
+    trains the RandomForest classifier, and can predict sentiment for given text.
+
+    Attributes:
+        MODEL_PATH (str): Path to save or load the model.
+        stop_words (set): Set of stopwords to be removed during preprocessing.
+        train_set (list): Formatted list of training data.
+        test_set (list): Formatted list of testing data.
+        model: Trained SVM classifier in a pipeline.
+        weight (float): The model's accuracy used as its weight in an ensemble.
+    """
 
     MODEL_PATH = './models/RandomForest_model.joblib'
 
@@ -855,7 +914,16 @@ class RandomForestModel(ModelManager):
 
         
     def preprocess_text(self, text):
+        """
+        Preprocess the given text by tokenizing and filtering stop words.
         
+        Args:
+            text (str): Text to be preprocessed.
+        
+        Returns:
+            str: Preprocessed text.
+        """
+
         words = nltk.word_tokenize(text)
 
         filtered_words = [word for word in words if word.lower() not in self.stop_words]
@@ -868,6 +936,10 @@ class RandomForestModel(ModelManager):
         """
         Preprocesses the train and test sets based on the RandomForest model requirements. 
 
+        Args:
+            train_set (list): The training dataset, where each element is a tuple of (text, label).
+            test_set (list): The test dataset, similar to the training set.
+            
         Returns:
             tuple: The preprocessed train_set and test_set.
         """
@@ -880,7 +952,13 @@ class RandomForestModel(ModelManager):
 
     
     def train(self):
-        
+        """
+        Train a RandomForest model using the train set.
+
+        Returns:
+            pipeline: Trained RandomForest model in a pipeline.
+        """
+         
         train_set = self.train_set
 
         # RandomForest model requires a list of features and a list of labels
@@ -904,7 +982,13 @@ class RandomForestModel(ModelManager):
 
     
     def score(self):
-         
+        """
+        Measure the accuracy of the RandomForest model on the test set.
+
+        Returns:
+            float: The accuracy of the model.
+        """
+
         test_set = self.test_set
 
         # RandomForest model requires a list of features and a list of labels
@@ -917,9 +1001,20 @@ class RandomForestModel(ModelManager):
 
     
     def predict(self, text):
+        """
+        Predicts the sentiment of a given text using the trained RandomForest model.
+
+        Args:
+            text (str): The input text for which the sentiment needs to be predicted.
+
+        Returns:
+            str: Predicted sentiment label (e.g., 'pos', 'neg', 'neu').
+        """
+
         preprocessed_text_RF = self.preprocess_text(text)
         prediction = self.model.predict([preprocessed_text_RF])[0]
         return prediction
+
 
 def other_datasets_load():
     """

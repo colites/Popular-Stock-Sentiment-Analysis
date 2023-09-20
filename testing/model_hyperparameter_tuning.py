@@ -13,8 +13,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 import database_config
 
+####### WARNING THIS COULD TAKE DAYS TO RUN, EVEN ON GOOD PC's ###############################
+####### THIS IS MEANT AS AN EXHAUSTIVE PARAMETERS-TUNING TEST FOR THE SCIKIT-LEARN MODELS ##############################
 
 def save_mentions_csv():
+    """
+    Export mention data from the database to a CSV file.
+    """
+
     try:
         conn = psycopg2.connect(host = database_config.DB_HOST,
                                        database = "hype_stock",
@@ -38,6 +44,13 @@ def save_mentions_csv():
 
 
 def format_custom_dataset_scikit():
+    """
+    Format and preprocess the custom dataset for scikit-learn models.
+
+    Returns:
+        Tuple: A tuple containing train and test data, each with features and labels.
+    """
+
     stop_words = set(stopwords.words('english'))
     df = pd.read_csv("custom_dataset.csv")
 
@@ -67,6 +80,13 @@ def format_custom_dataset_scikit():
 
 
 def test_SVM():
+    """
+    Test Support Vector Machine (SVM) models with different configurations.
+
+    Returns:
+        dict: A dictionary containing the best hyperparameters and scores for LinearSVC and SVC models.
+    """
+     
     (train_features, train_labels), _ = format_custom_dataset_scikit()
 
     # LinearSVC testing preparation
@@ -129,6 +149,13 @@ def test_SVM():
     return {"LinearSVC": grid_search_linear.best_params_, "SVC": grid_search_svc.best_params_}
 
 def test_RandomForest():
+    """
+    Test Random Forest classifier with different configurations.
+
+    Returns:
+        dict: A dictionary containing the best hyperparameters and score for the RandomForestClassifier.
+    """
+
     (train_features, train_labels), _ = format_custom_dataset_scikit()
 
     # RandomForest testing preparation
@@ -157,6 +184,13 @@ def test_RandomForest():
     return {"RandomForest": grid_search_rf.best_params_}
 
 def test_LogisticRegression():
+    """
+    Test Logistic Regression classifier with different configurations.
+
+    Returns:
+        dict: A dictionary containing the best hyperparameters and score for the LogisticRegression.
+    """
+    
     (train_features, train_labels), _ = format_custom_dataset_scikit()
 
      # LogisticRegression testing preparation

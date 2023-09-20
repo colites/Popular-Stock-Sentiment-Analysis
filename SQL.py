@@ -175,15 +175,19 @@ def find_all_stock_symbols_date_range(connection, cursor, start_date, end_date):
 
 def total_mentions_date_range_query(connection, cursor, start_date, end_date, symbol, source_type, measured):
     """
-    Query for the total number of mentions of each stock for the current date.
+    Query for the total number of mentions of each stock within a specified date range.
 
     Args:
-        connection: A connection object representing the database connection
-        cursor: A cursor object to execute database queries
-        date: A date object representing the current date
-    
+        connection (object): A connection object representing the database connection.
+        cursor (object): A cursor object used to execute database queries.
+        start_date (str): The start date of the date range.
+        end_date (str): The end date of the date range.
+        symbol (str): The stock symbol to query, or "All" to query all stocks.
+        source_type (str): The source type filter. Use "All" to include all sources.
+        measured (str): The type of data to measure (e.g., "Sentiments").
+
     Returns:
-        list: A list of dictionaries containing the stock symbol and total_mentions
+        list: A list of dictionaries containing the stock symbol and total_mentions.
     """
     
     where_conditions = ["m.date >= %s", "m.date <= %s"]
@@ -293,7 +297,6 @@ def compare_sentiments_stock_query(connection, cursor, symbol):
     return result
 
 
-########## REMEMBER TO RECHECK THE DOCS, LOTS OF THEM ARE OFF Now
 def get_mentions_date_range_query(connection, cursor, start_date, end_date):
     """
     Query to see the mentions that have been classified within a date range along with their classification
@@ -406,40 +409,5 @@ def compare_sentiments_all_stocks_date_range(connection, cursor, start_date, end
         GROUP BY m.symbol;
     """
     cursor.execute(query, (start_date, end_date))
-    result = cursor.fetchall()
-    return result
-
-
-def compare_sentiments_data_by_date(connection, cursor, symbol, dates):
-    """
-    Query for the positive, negative, and neutral sentiments for a given stock on every date entry in the given date range
-    Also gets the total amount of mentions for the stock.
-
-    Args:
-        connection: A connection object representing the database connection
-        cursor: A cursor object to execute database queries
-        symbol (str): A string representing the stock symbol.
-        dates (tuple): A tuple containing two date strings representing the start and end date of the range
-
-    Returns:
-        list: A list of dictionaries containing the stock symbol, date, positive_mentions, negative_mentions, neutral_mentions, and total_mentions
-    """
-    
-    query = """
-        SELECT
-            m.date,
-            m.symbol,
-            SUM(CASE WHEN ss.sentiment = 'positive' THEN 1 ELSE 0 END) AS positive_mentions,
-            SUM(CASE WHEN ss.sentiment = 'negative' THEN 1 ELSE 0 END) AS negative_mentions,
-            SUM(CASE WHEN ss.sentiment = 'neutral' THEN 1 ELSE 0 END) AS neutral_mentions,
-            COUNT(ss.sentiments_id) AS total_mentions
-        FROM mentions m
-        JOIN stock_sentiments ss ON m.mention_id = ss.sentiments_id
-        WHERE m.symbol = %s AND m.date >= %s AND m.date <= %s
-        GROUP BY m.date
-        ORDER BY m.date;
-    """
-    start_date, end_date = dates[0], dates[1]
-    cursor.execute(query, (symbol, start_date, end_date))
     result = cursor.fetchall()
     return result

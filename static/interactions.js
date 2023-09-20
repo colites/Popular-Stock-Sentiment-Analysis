@@ -4,7 +4,7 @@
 
 
 /**
- * Replaces the button for visualizations with the visualization options.
+ * Replaces the button for visualizations with the visualization options modal.
  */
 function display_visualizations_choices(){
 	const newButtons = document.querySelector(".modal-content");
@@ -24,7 +24,11 @@ function display_visualizations_choices(){
 }
 
 
-//Need to refactor into smaller functions. Also need to refactor to use switch because it is just better. Do not know why I used else if.
+/**
+ * Loads specific visualization options based on the provided type.
+ *
+ * @param {string} type - The type of visualization ('pie', 'donut', 'bar', or 'line').
+ */
 function load_visualization_options(type){
     	const optionsContainer = document.querySelector(".modal-content");
     
@@ -166,6 +170,11 @@ function load_visualization_options(type){
 }
 
 
+/**
+ * Displays a modal with visualization options.
+ *
+ * @param {string} modal_type - The type of modal to show ('visualizations' in this case).
+ */
 function show_modal(modal_type) {
 	if(modal_type === 'visualizations'){
 		display_visualizations_choices();
@@ -175,13 +184,21 @@ function show_modal(modal_type) {
 }
 
 
+/**
+ * Initializes event listeners for dropdowns.
+ */
 function initialize_dropdowns() {
    	 const yMeasureDropdown = document.getElementById('y_measure_type');
     	 yMeasureDropdown.addEventListener('change', handle_dropdown_change_all);
 }
 
 
-// Utility function to clear dropdown and add placeholder back
+/**
+ * Resets a dropdown to its placeholder state.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element to reset.
+ * @param {string} placeholderText - The placeholder text to set.
+ */
 function reset_dropdown_placeholder(dropdown, placeholderText) {
     	dropdown.innerHTML = "";
     	let placeholderOption = document.createElement("option");
@@ -193,6 +210,11 @@ function reset_dropdown_placeholder(dropdown, placeholderText) {
 }
 
 
+/**
+ * Handles the change event for independent variable dropdown, which determines the options of all other dropdowns.
+ *
+ * @param {Event} event - The change event object.
+ */
 async function handle_dropdown_change_all(event) {
 	const container = document.getElementById('visualization-options-container');
     	const startDate = container.getAttribute('data-start-date-modal');
@@ -271,18 +293,30 @@ async function handle_dropdown_change_all(event) {
 	}
 }
 
+
+/**
+ * Gets the selected value from a dropdown.
+ *
+ * @param {string} dropdownId - The ID of the dropdown element.
+ * @returns {string} - The selected value from the dropdown.
+ */
 function get_selected_value_from_dropdown(dropdownId) {
     	const dropdownElement = document.getElementById(dropdownId);
     	return dropdownElement.options[dropdownElement.selectedIndex].value;
 }
 
 
+/**
+ * Closes the modal by hiding it.
+ */
 function close_modal() {
    	document.getElementById('modal').style.display = "none";
 }
 
 
-// REMEMBER TO ADD DOCSTRINGS 
+/**
+ * Updates the date range in the 'buttons_container' element.
+ */
 function update_date_range() {
     	const container = document.getElementById('buttons_container');
     	container.setAttribute('data-start-date', document.getElementById('start_date').value);
@@ -290,6 +324,9 @@ function update_date_range() {
 }
 
 
+/**
+ * Updates the date range in the 'visualization-options-container' element of the modal and triggers dropdown changes.
+ */
 function update_date_range_modal() {
     	const container = document.getElementById('visualization-options-container');
     	container.setAttribute('data-start-date-modal', document.getElementById('start_date_modal').value);
@@ -298,6 +335,11 @@ function update_date_range_modal() {
 }
 
 
+/**
+ * Shows a dropdown by changing its display style to 'block'.
+ *
+ * @param {string} Id - The ID of the dropdown element.
+ */
 function show_dropdown(Id) {
     	const dropdown = document.getElementById(Id);
     	dropdown.style.display = 'block';
@@ -305,6 +347,11 @@ function show_dropdown(Id) {
 }
 
 
+/**
+ * Hides a dropdown by changing its display style to 'none'.
+ *
+ * @param {string} Id - The ID of the dropdown element.
+ */
 function hide_dropdown(Id) {
     	const dropdown = document.getElementById(Id);
     	dropdown.style.display = 'none'; 
@@ -312,7 +359,7 @@ function hide_dropdown(Id) {
 
 
 // ================================
-// Data Fetching Functions
+// Data Fetching for visualizations Functions
 // ================================
 
 
@@ -320,7 +367,6 @@ function hide_dropdown(Id) {
  * Fetches visualization data from the server and updates the visualization element.
  *
  * @param {string} route - The Flask route to fetch data from.
- * @param {string} selected_symbol - The stock symbol selected from the dropdown menu
  */
 function get_visualizations_data(route) {
 	const container = document.getElementById('visualization-options-container');
@@ -367,8 +413,14 @@ function get_visualizations_data(route) {
 }
 
 
+/**
+ * Sends a GET request to the server with query parameters and updates the visualization based on the response.
+ *
+ * @param {string} route - The Flask route to send the request to.
+ * @param {URLSearchParams} params - The query parameters to include in the request.
+ */
 function fetch_query_submit(route, params) {
-	// Sending the get request to the server and building the image using the response 
+
 	fetch(`${route}?${params.toString()}`)
         	.then(response => {
 			if (!response.ok) {
@@ -395,6 +447,11 @@ function fetch_query_submit(route, params) {
 }
 
 
+/**
+ * Generates a visualization based on the selected type and fetches data from the server.
+ *
+ * @param {string} type - The type of visualization ('pie', 'donut', 'bar', or 'line').
+ */
 function generate_visualization(type){
 	let route = ''
 	switch(type) {
@@ -416,7 +473,9 @@ function generate_visualization(type){
 
 
 /**
- * Fetches the symbol data from the server
+ * Fetches all available stock symbols from the server based on the selected date range.
+ *
+ * @returns {Promise<Array>} - A promise that resolves to an array of stock symbols.
  */
 async function fetch_all_symbols() {
 	const container = document.getElementById('visualization-options-container');

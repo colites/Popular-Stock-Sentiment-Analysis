@@ -102,7 +102,11 @@ def create_map():
 @app.route('/mention_information')
 def mention_information():
     """
-    Retrieve mention information for the current date and return it as a JSON object.
+    Retrieve mention information for the given date range and return it as a JSON object.
+
+    This route expects the following query parameters:
+    - start_date (str): The start date of the date range.
+    - end_date (str): The end date of the date range.
 
     Returns:
         Response: JSON response containing the mention information.
@@ -128,7 +132,11 @@ def mention_information():
 @app.route('/sentiment_statistics')
 def sentiment_statistics():
     """
-    Retrieve sentiment statistics for the current date and return them as a JSON object.
+    Retrieve sentiment statistics for the given date range and return them as a JSON object.
+
+    This route expects the following query parameters:
+    - start_date (str): The start date of the date range.
+    - end_date (str): The end date of the date range.
 
     Returns:
         Response: JSON response containing the sentiment statistics.
@@ -166,7 +174,11 @@ def button_click():
 @app.route('/symbols')
 def get_symbols():
     """
-    Retrieve all stock symbols from the database and return them as a JSON object.
+    Retrieve all stock symbols within the given date range and return them as a JSON object.
+
+    This route expects the following query parameters:
+    - start_date (str): The start date of the date range.
+    - end_date (str): The end date of the date range.
 
     Returns:
         Response: JSON response containing the stock symbols.
@@ -187,6 +199,14 @@ def get_symbols():
 def get_bar_graphs():
     """
     Retrieve bar graph data for a specific stock symbol and return it as a JSON object.
+
+    This route expects the following query parameters:
+    - start_date (str): The start date of the date range.
+    - end_date (str): The end date of the date range.
+    - symbol (str): The stock symbol for which the data is requested.
+    - source_type (str): The source type for sentiment data.
+    - y_measure_type (str): The type of data to measure on the y-axis (e.g., "Sentiments", "Positive", "Negative", "Neutral").
+    - x_measure_type (str): The type of data to measure on the x-axis (if applicable).
 
     Returns:
         Response: JSON response containing the bar graph data.
@@ -250,7 +270,15 @@ def get_bar_graphs():
 @app.route('/get_pie_chart')
 def get_pie_charts():
     """
-    Retrieve pie chart data for stock mentions and return it as a JSON object.
+    Retrieve pie chart data for stock mentions or sentiment and return it as a JSON object.
+
+    This route expects the following query parameters:
+    - start_date (str): The start date of the date range.
+    - end_date (str): The end date of the date range.
+    - symbol (str): The stock symbol for which the data is requested.
+    - source_type (str): The source type for sentiment data.
+    - y_measure_type (str): The type of data to measure (e.g., "Positive", "Negative", "Neutral", "Total").
+    - x_measure_type (str): The type of data to measure on the x-axis (if applicable).
 
     Returns:
         Response: JSON response containing the pie chart data.
@@ -319,7 +347,15 @@ def get_pie_charts():
 @app.route('/get_donut_chart')
 def get_donut_charts():
     """
-    Retrieve donut chart data for stock mentions and return it as a JSON object.
+    Retrieve donut chart data for stock mentions or sentiment and return it as a JSON object.
+
+    This route expects the following query parameters:
+    - start_date (str): The start date of the date range.
+    - end_date (str): The end date of the date range.
+    - symbol (str): The stock symbol for which the data is requested.
+    - source_type (str): The source type for sentiment data.
+    - y_measure_type (str): The type of data to measure (e.g., "Positive", "Negative", "Neutral", "Total").
+    - x_measure_type (str): The type of data to measure on the x-axis (if applicable).
 
     Returns:
         Response: JSON response containing the donut chart data.
@@ -390,8 +426,16 @@ def get_line_graphs():
     """
     Retrieve line graph data for a specific stock symbol and return it as a JSON object.
 
+    This route expects the following query parameters:
+    - start_date (str): The start date of the date range.
+    - end_date (str): The end date of the date range.
+    - symbol (str): The stock symbol for which the data is requested.
+    - source_type (str): The source type for sentiment data.
+    - y_measure_type (str): The type of data to measure (e.g., "Sentiments").
+    - x_measure_type (str): The type of data to measure on the x-axis (if applicable).
+
     Returns:
-        Response: JSON response containing the bar graph data.
+        Response: JSON response containing the line graph data.
     """
 
     # Get the y-axis parameter from the request URL
